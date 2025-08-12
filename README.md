@@ -1,4 +1,4 @@
-# Data - Start - C++ 数据结构库
+# Data - Start - C++ 数据结构库(Alpha - 0.1 版本)
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 ![竞赛禁止](https://img.shields.io/badge/竞赛使用-禁止-red)
@@ -41,7 +41,7 @@
 
 ## 🚀 功能特性
 - 封装了 `ODT` `Seg` `BiT` `UF` 等常用数据结构，开箱即用。
-- 现在的 Alpha-0.1 仅支持 `ODT`。
+- 现在的 Alpha - 0.1 仅支持 `ODT`。
 ---
 
 ## ❓ 常见问题
