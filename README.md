@@ -52,3 +52,21 @@ Q: 如何贡献代码？
 A: 遵循AGPL-3.0协议，提交Pull Request即可。
 
 > 更多问题请提交 [Issues](https://github.com/Transparent-fish/Data-Start/issues)
+
+## 更新日志
+
+- **Alpha v0.1**
+  > 更新了对 `ODT` 的支持
+
+## **预计更新**
+
+**测试版本**
+
+- [ ] **Alpha v0.5**
+  > 更新 `Seg` `BiT` `UF`
+
+**正式版**
+
+- [ ] **v1.0**
+  > 更新 `字典树`
+  > 集成 `FastIO`
