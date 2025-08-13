@@ -92,7 +92,7 @@ namespace OI_Start {
         /*两点距离公式*/double dis(double x_1, int y_1, int x_2, int y_2) { return sqrt((x_1 - x_2) * (x_1 - x_2) + (y_1 - y_2) * (y_1 - y_2)); }
     };
     /*-------------------zengyanbin1130 End-------------------*/
-}using namespace Data_Start;
+}using namespace OI_Start;
 
 signed main() {
 
