@@ -5,7 +5,10 @@
 using namespace std;
 #define int long long
 namespace Data_Start {
+	/*------------------- Alpha v0.5 Start -------------------*/
+	/*-------------------by Transparent-fish-------------------*/
 	struct ODT {
+	protected:
 		struct node {
 			int l, r;
 			mutable int v;
@@ -15,6 +18,7 @@ namespace Data_Start {
 			}
 		};
 		set<node>s;
+	public:
 		inline auto split(int pos) {
 			auto it = s.lower_bound(node(pos, 0, 0));
 			if (it != s.end() && it->l == pos)return it;
@@ -42,18 +46,20 @@ namespace Data_Start {
 		}
 	};
 	template<int N>
-	struct Seg {
+	class Seg {
+	protected:
 		int tree[N << 2], laz[N << 2];
 		char op[N << 2];
+	public:
 		/*pushup*/
-		void pushup(int rt, char op = '+') {
+		inline void pushup(int rt, char op = '+') {
 			if (op == '+')tree[rt] = tree[rt << 1] + tree[rt << 1 | 1];
 			else if (op == '-')tree[rt] = tree[rt << 1] - tree[rt << 1 | 1];
 			else if (op == '*')tree[rt] = tree[rt << 1] * tree[rt << 1 | 1];
 			else if (op == '/')tree[rt] = tree[rt << 1] / tree[rt << 1 | 1];
 		}
 		/*pushdown*/
-		void pushdown(int rt, int l, int r) {
+		inline void pushdown(int rt, int l, int r) {
 			if (laz[rt] == 0) return;
 			int mid = (l + r) >> 1;
 			char op_ = op[rt];
@@ -92,7 +98,7 @@ namespace Data_Start {
 			laz[rt] = 0;
 		}
 		/*build*/
-		void build(int a[], int l = 1, int r = N, int rt = 1) {
+		inline void build(int a[], int l = 1, int r = N, int rt = 1) {
 			if (l == r) {
 				tree[rt] = a[l];
 				return;
@@ -103,7 +109,7 @@ namespace Data_Start {
 			pushup(rt, op[rt]);
 		}
 		/*update*/
-		void update(int l, int r, int L, int R, int rt, int v, char op_) {
+		inline void update(int l, int r, int L, int R, int rt, int v, char op_) {
 			if (L <= l && R <= r) {
 				op[rt] = op_;
 				if (op_ == '+') {
@@ -129,11 +135,65 @@ namespace Data_Start {
 			pushup(rt, op[rt]);
 		}
 		/*query*/
-		int query(int l, int r, int L, int R, int rt) {
-
+		inline int query(int l, int r, int L, int R, int rt) {
+			if (L <= l && R <= r) return tree[rt];
+			pushdown(rt, l, r);
+			int mid = l + r >> 1, ans = 0;
+			if (op[rt] == '+') {
+				ans = 0;
+				if (L <= mid) ans += query(l, mid, L, R, rt << 1);
+				if (R > mid) ans += query(mid + 1, r, L, R, rt << 1 | 1);
+			}
+			else if (op[rt] == '-') {
+				ans = 0;
+				if (L <= mid) ans += query(l, mid, L, R, rt << 1);
+				if (R > mid) ans -= query(mid + 1, r, L, R, rt << 1 | 1);
+			}
+			else if (op[rt] == '*') {
+				ans = 0;
+				if (L <= mid) ans *= query(l, mid, L, R, rt << 1);
+				if (R > mid) ans *= query(mid + 1, r, L, R, rt << 1 | 1);
+			}
+			else if (op[rt] == '/') {
+				ans = 0;
+				if (L <= mid) ans /= query(l, mid, L, R, rt << 1);
+				if (R > mid) ans /= query(mid + 1, r, L, R, rt << 1 | 1);
+			}
+			return ans;
 		}
 	};
-};
+	/*-------------------Transparent-fish end-------------------*/
+
+	/*-------------------Code by zengyanbin1130-------------------*/
+	template<int N>
+	class UF {
+	protected:
+		int f[N];
+		inline int find(int x) {
+			if (f[x] == x) return x;
+			return f[x] = find(f[x]);
+		}
+	public:
+		inline void init() {//初始化
+			for (int i = 1; i <= N; i++) {
+				f[i] = i;
+			}
+		}
+		inline void merge(int x, int y) {//合并
+			int fx = find(x);
+			int fy = find(y);
+			f[fx] = fy;
+		}
+		inline bool query(int x, int y) {//查询
+			int fx = find(x);
+			int fy = find(y);
+			return fx == fy;
+		}
+	};
+	/*-------------------Code by zengyanbin1130-------------------*/
+
+	/*------------------- Alpha v0.5 End -------------------*/
+}using namespace Data_Start;
 
 signed main() {
 
