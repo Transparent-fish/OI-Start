@@ -2,7 +2,7 @@
 using namespace std;
 #define int long long
 
-namespace Data_Start {
+namespace OI_Start {
     /*-------------------Transparent-fish Start-------------------*/
     class ODT {
     protected:
