@@ -3,7 +3,7 @@ using namespace std;
 #define int long long
 
 namespace Data_Start {
-	/*-------------------Transparent-fish Start-------------------*/
+    /*-------------------Transparent-fish Start-------------------*/
     class ODT {
     protected:
         struct node {
@@ -69,8 +69,8 @@ namespace Data_Start {
             else return 0;
         }
     };
-	/*-------------------Transparent-fish End-------------------*/
-	/*-------------------zengyanbin1130 Start-------------------*/
+    /*-------------------Transparent-fish End-------------------*/
+    /*-------------------zengyanbin1130 Start-------------------*/
     template<int N>
     class UF {
     protected:
@@ -80,73 +80,18 @@ namespace Data_Start {
         inline void merge(int x, int y) { int fx = find(x), fy = find(y);f[fx] = fy; }
         inline bool query(int x, int y) { int fx = find(x);int fy = find(y);return fx == fy; }
     };
-
-	class funct {
-	public:
-		/*最小公倍数*/
-		int lcm(int a, int b) {
-			return a * b / __gcd(a, b);
-		}
-		/*快速幂*/
-		int power(int a, int b, int Mod = -1) {
-			int ans = 1;
-			for (; b; b >>= 1) {
-				if (b & 1) {
-					ans = ans * a;
-					if (Mod != -1)
-						ans %= Mod;
-				}
-				a = a * a;
-				if (Mod != -1)
-					a %= Mod;
-			}
-			return ans;
-		}
-		/*进制转换*/
-		int conversion(int x, string s) {
-			reverse(s.begin(), s.end());
-			int ans = 0;
-			for (int i = 0; i < s.size(); i++) {
-				int u;
-				if (s[i] > '9') {
-					u = s[i] - '7';
-				} else {
-					u = s[i] - '0';
-				}
-				ans += power(x, i) * u;
-			}
-			return ans;
-		}
-		string conversion(int x, int n) {
-			string ans = "";
-			while (n) {
-				int u = n % x;
-				if (u >= 10) {
-					u += '7';
-				} else {
-					u += '0';
-				}
-				ans += (char)u;
-				n /= x;
-			}
-			reverse(ans.begin(), ans.end());
-			return ans;
-		}
-		/*判断质数*/
-		int prime(int x) {
-			if (x <= 1)
-				return false;
-			for (int i = 2; i * i <= x; i++)
-				if (x % i == 0)
-					return false;
-			return true;
-		}
-		/*两点距离公式*/
-		double dis(double x_1, int y_1, int x_2, int y_2) {
-			return sqrt((x_1 - x_2) * (x_1 - x_2) + (y_1 - y_2) * (y_1 - y_2));
-		}
-}
-	/*-------------------zengyanbin1130 End-------------------*/
+    class funct {
+    public:
+        /*最小公倍数*/
+        int lcm(int a, int b) { return a * b / __gcd(a, b); }
+        /*快速幂*/
+        int power(int a, int b, int Mod = -1) { int ans = 1;for (; b; b >>= 1) { if (b & 1) { ans = ans * a;if (Mod != -1) { ans %= Mod; } }a = a * a;if (Mod != -1) { a %= Mod; } }return ans; }
+        /*进制转换*/int conversion(int x, string s) { reverse(s.begin(), s.end());int ans = 0;for (int i = 0; i < s.size(); i++) { int u;if (s[i] > '9') { u = s[i] - '7'; } else { u = s[i] - '0'; }ans += power(x, i) * u; }return ans; }
+        string conversion(int x, int n) { string ans = "";for (;n;) { int u = n % x;if (u >= 10) { u += '7'; } else { u += '0'; }ans += (char)u;n /= x; }reverse(ans.begin(), ans.end());return ans; }
+        /*判断质数*/int prime(int x) { if (x <= 1) { return 0; }for (int i = 2; i * i <= x; i++) { if (x % i == 0) { return 0; } }return 1; }
+        /*两点距离公式*/double dis(double x_1, int y_1, int x_2, int y_2) { return sqrt((x_1 - x_2) * (x_1 - x_2) + (y_1 - y_2) * (y_1 - y_2)); }
+    };
+    /*-------------------zengyanbin1130 End-------------------*/
 }using namespace Data_Start;
 
 signed main() {
