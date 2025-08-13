@@ -102,6 +102,36 @@ namespace Data_Start {
 			build(a, mid + 1, r, rt << 1 | 1);
 			pushup(rt, op[rt]);
 		}
+		/*update*/
+		void update(int l, int r, int L, int R, int rt, int v, char op_) {
+			if (L <= l && R <= r) {
+				op[rt] = op_;
+				if (op_ == '+') {
+					tree[rt] += v * (r - l + 1);
+					laz[rt] += v;
+				}
+				else if (op_ == '-') {
+					tree[rt] -= v * (r - l + 1);
+					laz[rt] -= v;
+				}
+				else if (op_ == '*') {
+					tree[rt] *= v * (r - l + 1);
+					laz[rt] *= v;
+				}
+				else if (op_ == '/') {
+					tree[rt] /= v * (r - l + 1);
+				}
+			}
+			pushdown(rt, l, r);
+			int mid = l + r >> 1;
+			if (L <= mid) update(l, mid, L, R, rt << 1, v, op_);
+			if (R > mid) update(l, mid, L, R, rt << 1 | 1, v, op_);
+			pushup(rt, op[rt]);
+		}
+		/*query*/
+		int query(int l, int r, int L, int R, int rt) {
+
+		}
 	};
 };
 
