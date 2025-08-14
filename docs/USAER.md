@@ -41,8 +41,8 @@ int b = tools.power(x, y, mod);//b = x ^ y % mod
 **进制转换**
 ```cpp
 funct tools;
-string s = conversion(x, n);//把十进制数n转换成x进制的数，返回字符串。
-int k = conversion(x, s);//把x进制的数转换为10进制的数,s是字符串。
+string s = conversion(x, n);// 把十进制数n转换成x进制的数，返回字符串。
+int k = conversion(x, s);// 把x进制的数转换为10进制的数,s是字符串。
 ```
 **lcm**
 ```cpp
