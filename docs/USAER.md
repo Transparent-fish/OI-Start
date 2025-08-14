@@ -57,12 +57,7 @@ int a = tools.prime(x);//如果 x 为质数，返回1，否则返回0
 # 树状数组 (BiT)
 1. **单点修改, 区间查询**
 ```cpp
-BiT<大小>bit;//定义
-bit.update(k, x);
-```
-2. **区间修改， 单点查询**
-```cpp
-BiT_<大小>bit_;//定义
-bit_.update(x, c);//给下表为 x 的数加上 c
-int num = bit_.query(x);//查询 a[x] 的值
+BIT<大小>bit;//定义
+bit.update(x, k);//将第x个数，加上k
+int a = bit.query(x);//查询x的前缀和,即[1, x]区间的值
 ```

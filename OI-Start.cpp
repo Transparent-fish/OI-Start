@@ -127,6 +127,14 @@ namespace OI_Start {
         inline int prime(int x) { if (x <= 1) { return 0; }for (int i = 2; i * i <= x; i++) { if (x % i == 0) { return 0; } }return 1; }
         inline double dis(double x_1, int y_1, int x_2, int y_2) { return sqrt((x_1 - x_2) * (x_1 - x_2) + (y_1 - y_2) * (y_1 - y_2)); }
     };
+    template<int N>
+    class BIT {
+    protected:
+        int tree[N + 5];int lowbit(int x) {return x & -x;}
+    public:
+        void update(int x, int k) {for (int i = x; i <= N; i += lowbit(i)) {tree[i] += k;}}
+        int query(int x) {int ans = 0;for (int i = x; i >= 1; i -= lowbit(i)) {ans += tree[i];}return ans;}
+    };
     /*-------------------zengyanbin1130 End-------------------*/
 }using namespace OI_Start;
 
