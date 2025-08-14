@@ -99,6 +99,14 @@ namespace OI_Start {
     }using FastIO::in;
     using FastIO::out;
 #undef pan
+    template<int N>
+    class BiT_ {
+    protected:
+        int tree[N];inline int lowbit(int x) { return x & -x };
+    public:
+        inline void update(int x, int c, char op = '+') { for (int i = x;i <= n;i += lowbit(i)) { if (op == '+') { tree[i] += c; } else if (op == '-') { tree[i] -= c; } else if (op == '*') { tree[i] *= c; } else if (op == '/') { tree[i] /= c; } } }
+        inline int query(int x) { int res = 0;for (int i = x; i >= 1; i -= lowbit(i)) { res += tree[i]; }return res; }
+    };
     /*-------------------Transparent-fish End-------------------*/
     /*-------------------zengyanbin1130 Start-------------------*/
     template<int N>
@@ -112,19 +120,17 @@ namespace OI_Start {
     };
     class funct {
     public:
-        /*最小公倍数*/
-        int lcm(int a, int b) { return a * b / __gcd(a, b); }
-        /*快速幂*/
-        int power(int a, int b, int Mod = -1) { int ans = 1;for (; b; b >>= 1) { if (b & 1) { ans = ans * a;if (Mod != -1) { ans %= Mod; } }a = a * a;if (Mod != -1) { a %= Mod; } }return ans; }
-        /*进制转换*/int conversion(int x, string s) { reverse(s.begin(), s.end());int ans = 0;for (int i = 0; i < s.size(); i++) { int u;if (s[i] > '9') { u = s[i] - '7'; } else { u = s[i] - '0'; }ans += power(x, i) * u; }return ans; }
-        string conversion(int x, int n) { string ans = "";for (;n;) { int u = n % x;if (u >= 10) { u += '7'; } else { u += '0'; }ans += (char)u;n /= x; }reverse(ans.begin(), ans.end());return ans; }
-        /*判断质数*/int prime(int x) { if (x <= 1) { return 0; }for (int i = 2; i * i <= x; i++) { if (x % i == 0) { return 0; } }return 1; }
-        /*两点距离公式*/double dis(double x_1, int y_1, int x_2, int y_2) { return sqrt((x_1 - x_2) * (x_1 - x_2) + (y_1 - y_2) * (y_1 - y_2)); }
+        inline int lcm(int a, int b) { return a * b / __gcd(a, b); }
+        inline int power(int a, int b, int Mod = -1) { int ans = 1;for (; b; b >>= 1) { if (b & 1) { ans = ans * a;if (Mod != -1) { ans %= Mod; } }a = a * a;if (Mod != -1) { a %= Mod; } }return ans; }
+        inline int conversion(int x, string s) { reverse(s.begin(), s.end());int ans = 0;for (int i = 0; i < s.size(); i++) { int u;if (s[i] > '9') { u = s[i] - '7'; } else { u = s[i] - '0'; }ans += power(x, i) * u; }return ans; }
+        inline string conversion(int x, int n) { string ans = "";for (;n;) { int u = n % x;if (u >= 10) { u += '7'; } else { u += '0'; }ans += (char)u;n /= x; }reverse(ans.begin(), ans.end());return ans; }
+        inline int prime(int x) { if (x <= 1) { return 0; }for (int i = 2; i * i <= x; i++) { if (x % i == 0) { return 0; } }return 1; }
+        inline double dis(double x_1, int y_1, int x_2, int y_2) { return sqrt((x_1 - x_2) * (x_1 - x_2) + (y_1 - y_2) * (y_1 - y_2)); }
     };
     /*-------------------zengyanbin1130 End-------------------*/
 }using namespace OI_Start;
 
 signed main() {
-    
+
     return 0;
 }

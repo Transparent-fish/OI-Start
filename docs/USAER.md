@@ -54,3 +54,15 @@ int a = tools.lcm(x, y);//返回 x y 的 lcm 值
 funct tools;
 int a = tools.prime(x);//如果 x 为质数，返回1，否则返回0
 ```
+# 树状数组 (BiT)
+1. **单点修改, 区间查询**
+```cpp
+BiT<大小>bit;//定义
+bit.update(k, x);
+```
+2. **区间修改， 单点查询**
+```cpp
+BiT_<大小>bit_;//定义
+bit_.update(x, c);//给下表为 x 的数加上 c
+int num = bit_.query(x);//查询 a[x] 的值
+```
