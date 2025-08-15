@@ -130,10 +130,19 @@ namespace OI_Start {
     template<int N>
     class BIT {
     protected:
-        int tree[N + 5];int lowbit(int x) {return x & -x;}
+        int tree[N + 5];int lowbit(int x) { return x & -x; }
     public:
-        void update(int x, int k) {for (int i = x; i <= N; i += lowbit(i)) {tree[i] += k;}}
-        int query(int x) {int ans = 0;for (int i = x; i >= 1; i -= lowbit(i)) {ans += tree[i];}return ans;}
+        void update(int x, int k) { for (int i = x; i <= N; i += lowbit(i)) { tree[i] += k; } }
+        int query(int x) { int ans = 0;for (int i = x; i >= 1; i -= lowbit(i)) { ans += tree[i]; }return ans; }
+    };
+    template<int N>
+    class Trie {
+    protected:
+        int tree[N][128], cnt[N], tot;int Get(char ch) { return ch - ' '; }
+    public:
+        void init() { for (int i = 0; i <= tot; i++) { cnt[i] = 0;for (int j = 0; j < 128; j++) { tree[i][j] = 0; } }tot = 0; }
+        void insert(string s) { int u = 0;for (int i = 0; i < s.size(); i++) { int v = Get(s[i]);if (tree[u][v] == 0) { tree[u][v] = ++tot; }u = tree[u][v];cnt[u]++; } }
+        int find(string s) { int u = 0;for (int i = 0; i < s.size(); i++) { int v = Get(s[i]);if (tree[u][v] == 0) { return 0; }u = tree[u][v]; }return cnt[u]; }
     };
     /*-------------------zengyanbin1130 End-------------------*/
 }using namespace OI_Start;
