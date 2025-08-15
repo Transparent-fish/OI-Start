@@ -22,18 +22,8 @@
 - 在线评测平台（OJ）的比赛
 - 任何可能影响比赛公平性的场景
 
-**允许使用场景**：
-- 个人算法训练
-- 非营利性教学
-- 学术研究
-
-> 违反条款可能导致竞赛处罚或法律追责。完整协议见 [LICENSE](https://github.com/Transparent-fish/Data-Start/main/LICENSE.txt) 文件。
+> 违反条款可能导致竞赛处罚或法律追责。完整协议见 [LICENSE](https://github.com/Transparent-fish/OI-Start/main/LICENSE.txt) 文件。
 > 若违反条款，在竞赛中使用，本作者不承担任何责任。
-
-**违规使用将导致：**
-> - 自动终止授权（AGPL第8条）
-> - 可能面临竞赛组委会处罚
-> - 保留法律追诉权利
 
 ---
 
@@ -48,7 +38,7 @@ A: 为保证竞赛公平性，所有选手应自己完成代码
 Q: 如何贡献代码？  
 A: 遵循AGPL-3.0协议，提交Pull Request即可
 
-> 更多问题请提交 [Issues](https://github.com/Transparent-fish/Data-Start/issues)
+> 更多问题请提交 [Issues](https://github.com/Transparent-fish/OI-Start/issues)
 
 ## 更新日志
 
