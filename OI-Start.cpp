@@ -99,14 +99,6 @@ namespace OI_Start {
     }using FastIO::in;
     using FastIO::out;
 #undef pan
-    template<int N>
-    class BiT_ {
-    protected:
-        int tree[N];inline int lowbit(int x) { return x & -x };
-    public:
-        inline void update(int x, int c, char op = '+') { for (int i = x;i <= n;i += lowbit(i)) { if (op == '+') { tree[i] += c; } else if (op == '-') { tree[i] -= c; } else if (op == '*') { tree[i] *= c; } else if (op == '/') { tree[i] /= c; } } }
-        inline int query(int x) { int res = 0;for (int i = x; i >= 1; i -= lowbit(i)) { res += tree[i]; }return res; }
-    };
     /*-------------------Transparent-fish End-------------------*/
     /*-------------------zengyanbin1130 Start-------------------*/
     template<int N>
