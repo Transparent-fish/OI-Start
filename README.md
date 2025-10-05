@@ -29,7 +29,7 @@ Q: 为什么禁止竞赛使用？
 A: 为保证竞赛公平性，所有选手应自己完成代码
 
 Q: 如何贡献代码？  
-A: 遵循AGPL-3.0协议，提交Pull Request即可
+A: Fork 并修改后，提交Pull Request即可
 
 > 更多问题请提交 [issues](https://github.com/Transparent-fish/OI-Start/issues)
 
