@@ -1,10 +1,7 @@
 # OI - Start - C++ OI 库
 
 ![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
-![竞赛禁止](https://img.shields.io/badge/竞赛使用-禁止-red)
-![训练专用](https://img.shields.io/badge/用途-算法训练-9cf)
-![署名要求](https://img.shields.io/badge/署名-必须保留-brightgreen)
-
+![禁止在竞赛 / 模拟赛中使用](https://img.shields.io/badge/禁止-竞赛使用-red)
 专为算法训练而设计的 OI 库，**禁止在任何编程竞赛中使用**。
 
 ## 📜 许可协议
