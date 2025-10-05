@@ -1,6 +1,6 @@
 # OI - Start - C++ OI 库
 
-[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![竞赛禁止](https://img.shields.io/badge/竞赛使用-禁止-red)
 ![训练专用](https://img.shields.io/badge/用途-算法训练-9cf)
 ![署名要求](https://img.shields.io/badge/署名-必须保留-brightgreen)
