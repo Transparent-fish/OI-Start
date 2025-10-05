@@ -1,6 +1,6 @@
 # OI - Start - C++ OI 库
 
-[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![竞赛禁止](https://img.shields.io/badge/竞赛使用-禁止-red)
 ![训练专用](https://img.shields.io/badge/用途-算法训练-9cf)
 ![署名要求](https://img.shields.io/badge/署名-必须保留-brightgreen)
@@ -8,13 +8,7 @@
 专为算法训练而设计的 OI 库，**禁止在任何编程竞赛中使用**。
 
 ## 📜 许可协议
-本项目采用 **GNU Affero General Public License v3.0 (AGPL-3.0)** 并附加以下条款：
-
-### 附加条款
-1. **禁止比赛使用**  
-   - 禁止在任何竞赛中使用
-2. **署名要求**  
-   - 必须在衍生作品中保留原始作者信息和项目链接
+本项目采用 **MIT License**。
 
 ### ⚠️ 使用限制
 **严格禁止在以下场景使用**：
@@ -22,7 +16,6 @@
 - 在线评测平台（OJ）的比赛
 - 任何可能影响比赛公平性的场景
 
-> 违反条款可能导致竞赛处罚或法律追责。完整协议见 [LICENSE](https://github.com/Transparent-fish/OI-Start/main/LICENSE.txt) 文件。
 > 若违反条款，在竞赛中使用，本作者不承担任何责任。
 
 ---
@@ -38,7 +31,7 @@ A: 为保证竞赛公平性，所有选手应自己完成代码
 Q: 如何贡献代码？  
 A: 遵循AGPL-3.0协议，提交Pull Request即可
 
-> 更多问题请提交 [Issues](https://github.com/Transparent-fish/OI-Start/issues)
+> 更多问题请提交 [issues](https://github.com/Transparent-fish/OI-Start/issues)
 
 ## 更新日志
 
