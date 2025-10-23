@@ -107,7 +107,7 @@ namespace OI_Start {
             int l, r, v;
         }tree[N * 4 + 25 * N];
     public:
-        void build(int l, int r, int rt) { if (l == r) { tree[rt].v = a[l];return; }int mid = l + r >> 1;tree[rt].l = ++cnt;build(l, mid, tree[rt].l);tree[rt].r = ++cnt;build(mid + 1, r, tree[rt].r); }
+        void build(int l, int r, int rt,int a[]) { if (l == r) { tree[rt].v = a[l];return; }int mid = l + r >> 1;tree[rt].l = ++cnt;build(l, mid, tree[rt].l,a);tree[rt].r = ++cnt;build(mid + 1, r, tree[rt].r,a); }
         void update(int l, int r, int rt, int las, int p, int v) { if (l == r) { tree[rt].v = v;return; }int mid = l + r >> 1;if (p <= mid) { tree[rt].r = tree[las].r, tree[rt].l = ++cnt;update(l, mid, tree[rt].l, tree[las].l, p, v); } else { tree[rt].l = tree[las].l, tree[rt].r = ++cnt;update(mid + 1, r, tree[rt].r, tree[las].r, p, v); } }
         int query(int l, int r, int rt, int v) { if (l == r) { return tree[rt].v; }int mid = l + r >> 1;if (v <= mid) { return query(l, mid, tree[rt].l, v); } else { return query(mid + 1, r, tree[rt].r, v); } }
     };
