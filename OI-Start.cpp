@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
 #define pan(x) isdigit(x)
 
 namespace OI_Start {
@@ -27,7 +26,7 @@ namespace OI_Start {
         }
     };
     template<int N>
-    class Seg {
+    class Seg {//这个 query 有点问题，如果除数为 0 好像会触发未定义行为，过两天修
     protected:
         int tree[N << 2], laz[N << 2];char op[N << 2];
         void init_op(int& val, int v, char op_, int len = 1) {
@@ -121,7 +120,8 @@ namespace OI_Start {
     };
     class funct {
     public:
-        int lcm(int a, int b) { return a * b / __gcd(a, b); }
+        int gcd(int a, int b) { return b == 0 ? a : gcd(b, a % b); }
+        int lcm(int a, int b) { return a * b / gcd(a, b); }
         int power(int a, int b, int Mod = -1) { int ans = 1;for (; b; b >>= 1) { if (b & 1) { ans = ans * a;if (Mod != -1) { ans %= Mod; } }a = a * a;if (Mod != -1) { a %= Mod; } }return ans; }
         int conversion(int x, string s) { reverse(s.begin(), s.end());int ans = 0;for (int i = 0; i < s.size(); i++) { int u;if (s[i] > '9') { u = s[i] - '7'; } else { u = s[i] - '0'; }ans += power(x, i) * u; }return ans; }
         string conversion(int x, int n) { string ans = "";for (;n;) { int u = n % x;if (u >= 10) { u += '7'; } else { u += '0'; }ans += (char)u;n /= x; }reverse(ans.begin(), ans.end());return ans; }
@@ -172,7 +172,7 @@ namespace OI_Start {
     /*-------------------zengyanbin1130 End-------------------*/
 }using namespace OI_Start;
 
-signed main() {
+int main() {
 
     return 0;
 }
