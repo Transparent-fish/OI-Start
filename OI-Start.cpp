@@ -11,9 +11,7 @@ namespace OI_Start {
         };
         set<node>s;
     public:
-        auto split(int pos) {
-            auto it = s.lower_bound(node(pos));if (it != s.end() && it->l == pos)return it;--it;int l = it->l, r = it->r, v = it->v;s.erase(it);s.insert(node(l, pos - 1, v));return s.insert(node(pos, r, v)).first;
-        }
+        auto split(int pos) { auto it = s.lower_bound(node(pos));if (it != s.end() && it->l == pos)return it;--it;int l = it->l, r = it->r, v = it->v;s.erase(it);s.insert(node(l, pos - 1, v));return s.insert(node(pos, r, v)).first; }
         void assign(int l, int r, int v) { auto itr = split(r + 1), itl = split(l);s.erase(itl, itr), s.insert(node(l, r, v)); }
         void init(int l, int r, int v) { s.insert(node(l, r, v)); }
         void update(int l, int r, int v, char op = '+') {
@@ -26,46 +24,80 @@ namespace OI_Start {
         }
     };
     template<int N>
-    class Seg {//这个 query 有点问题，如果除数为 0 好像会触发未定义行为，过两天修
+    class Seg {
     protected:
-        int tree[N << 2], laz[N << 2];char op[N << 2];
-        void init_op(int& val, int v, char op_, int len = 1) {
-            if (op_ == '+')val += v * len;else if (op_ == '-')val -= v * len;else if (op_ == '*')val *= v;else if (op_ == '/')val /= v;
+        long long tree[N << 2];
+        long long add_[N << 2]; // 区间加的懒标记
+        long long mul_[N << 2]; // 区间乘的懒标记（初始为1）
+        void apply_mul(int rt, long long v, int len) {
+            tree[rt] *= v;
+            mul_[rt] *= v;
+            add_[rt] *= v; // 乘法会影响已存在的加法懒标记
+        }
+        void apply_add(int rt, long long v, int len) {
+            tree[rt] += v * len;
+            add_[rt] += v;
         }
     public:
-        void init(char op_ = '+') { fill(op, op + (N << 2), op_); }
+        // 初始化：清零 tree、add，mul 置 1
+        void init(char op_ = '+') {
+            (void)op_;
+            fill(tree, tree + (N << 2), 0);
+            fill(add_, add_ + (N << 2), 0);
+            for (int i = 0; i < (N << 2); ++i) mul_[i] = 1;
+        }
         void pushup(int rt) {
-            if (op[rt] == '+')tree[rt] = tree[rt << 1] + tree[rt << 1 | 1];
-            else if (op[rt] == '-')tree[rt] = tree[rt << 1] - tree[rt << 1 | 1];
-            else if (op[rt] == '*')tree[rt] = tree[rt << 1] * tree[rt << 1 | 1];
-            else if (op[rt] == '/')tree[rt] = tree[rt << 1] / tree[rt << 1 | 1];
+            tree[rt] = tree[rt << 1] + tree[rt << 1 | 1];
         }
         void pushdown(int rt, int l, int r) {
-            if (laz[rt] == 0)return;int mid = (l + r) >> 1;int llen = mid - l + 1;int rlen = r - mid;
-            init_op(tree[rt << 1], laz[rt], op[rt], llen);
-            if (op[rt] == '+' || op[rt] == '-')laz[rt << 1] += laz[rt];else init_op(laz[rt << 1], laz[rt], op[rt]);
-            init_op(tree[rt << 1 | 1], laz[rt], op[rt], rlen);
-            if (op[rt] == '+' || op[rt] == '-')laz[rt << 1 | 1] += laz[rt];else init_op(laz[rt << 1 | 1], laz[rt], op[rt]);laz[rt] = 0;
+            int mid = (l + r) >> 1;
+            int llen = mid - l + 1;
+            int rlen = r - mid;
+            if (mul_[rt] != 1) {
+                apply_mul(rt << 1, mul_[rt], llen);
+                apply_mul(rt << 1 | 1, mul_[rt], rlen);
+                mul_[rt] = 1;
+            }
+            if (add_[rt] != 0) {
+                apply_add(rt << 1, add_[rt], llen);
+                apply_add(rt << 1 | 1, add_[rt], rlen);
+                add_[rt] = 0;
+            }
         }
         void build(int a[], int l = 1, int r = N, int rt = 1) {
-            if (l == r) { tree[rt] = a[l];laz[rt] = 0;return; }int mid = (l + r) >> 1;
-            build(a, l, mid, rt << 1);build(a, mid + 1, r, rt << 1 | 1);pushup(rt);
+            mul_[rt] = 1; add_[rt] = 0;
+            if (l == r) { tree[rt] = a[l]; return; }
+            int mid = (l + r) >> 1;
+            build(a, l, mid, rt << 1);
+            build(a, mid + 1, r, rt << 1 | 1);
+            pushup(rt);
         }
+        // 支持 '+' 和 '*' 两种操作（其它符号忽略）
         void update(int L, int R, int v, char op_, int l = 1, int r = N, int rt = 1) {
             if (L <= l && r <= R) {
-                op[rt] = op_;init_op(tree[rt], v, op_, r - l + 1);
-                if (op_ == '+' || op_ == '-')laz[rt] += v;else init_op(laz[rt], v, op_);return;
+                if (op_ == '*') {
+                    apply_mul(rt, v, r - l + 1);
+                }
+                else if (op_ == '+') {
+                    apply_add(rt, v, r - l + 1);
+                }
+                // 对于 '-' 和 '/' 暂不支持复合懒标记（可按需求扩展）
+                return;
             }
-            pushdown(rt, l, r);int mid = (l + r) >> 1;
-            if (L <= mid)update(L, R, v, op_, l, mid, rt << 1);if (R > mid)update(L, R, v, op_, mid + 1, r, rt << 1 | 1);pushup(rt);
+            pushdown(rt, l, r);
+            int mid = (l + r) >> 1;
+            if (L <= mid) update(L, R, v, op_, l, mid, rt << 1);
+            if (R > mid) update(L, R, v, op_, mid + 1, r, rt << 1 | 1);
+            pushup(rt);
         }
-        int query(int L, int R, int l = 1, int r = N, int rt = 1) {
-            if (L <= l && r <= R)return tree[rt];pushdown(rt, l, r);int mid = (l + r) >> 1;
-            if (op[rt] == '+') { int res = 0;if (L <= mid)res += query(L, R, l, mid, rt << 1);if (R > mid)res += query(L, R, mid + 1, r, rt << 1 | 1);return res; }
-            else if (op[rt] == '-') { int res = 0;if (L <= mid)res += query(L, R, l, mid, rt << 1);if (R > mid)res -= query(L, R, mid + 1, r, rt << 1 | 1);return res; }
-            else if (op[rt] == '*') { int res = 1;if (L <= mid)res *= query(L, R, l, mid, rt << 1);if (R > mid)res *= query(L, R, mid + 1, r, rt << 1 | 1);return res; }
-            else if (op[rt] == '/') { int res = 1;if (L <= mid)res = query(L, R, l, mid, rt << 1);if (R > mid) { int r_ = query(L, R, mid + 1, r, rt << 1 | 1);if (r_ != 0)res /= r_; }return res; }
-            else return 0;
+        long long query(int L, int R, int l = 1, int r = N, int rt = 1) {
+            if (L <= l && r <= R) return tree[rt];
+            pushdown(rt, l, r);
+            int mid = (l + r) >> 1;
+            long long res = 0;
+            if (L <= mid) res += query(L, R, l, mid, rt << 1);
+            if (R > mid) res += query(L, R, mid + 1, r, rt << 1 | 1);
+            return res;
         }
     };
     namespace FastIO {
@@ -105,8 +137,28 @@ namespace OI_Start {
             int l, r, v;
         }tree[N * 4 + 25 * N];
     public:
-        void build(int l, int r, int rt, int a[]) { if (l == r) { tree[rt].v = a[l];return; }int mid = l + r >> 1;tree[rt].l = ++cnt;build(l, mid, tree[rt].l, a);tree[rt].r = ++cnt;build(mid + 1, r, tree[rt].r, a); }
-        void update(int l, int r, int rt, int las, int p, int v) { if (l == r) { tree[rt].v = v;return; }int mid = l + r >> 1;if (p <= mid) { tree[rt].r = tree[las].r, tree[rt].l = ++cnt;update(l, mid, tree[rt].l, tree[las].l, p, v); } else { tree[rt].l = tree[las].l, tree[rt].r = ++cnt;update(mid + 1, r, tree[rt].r, tree[las].r, p, v); } }
+        void build(int l, int r, int rt, int a[]) {
+            // 修复：在根调用时初始化 cnt，避免与根索引冲突
+            if (rt == 1) cnt = 1;
+            if (l == r) { tree[rt].v = a[l]; return; }
+            int mid = (l + r) >> 1;
+            tree[rt].l = ++cnt; build(l, mid, tree[rt].l, a);
+            tree[rt].r = ++cnt; build(mid + 1, r, tree[rt].r, a);
+        }
+        void update(int l, int r, int rt, int las, int p, int v) {
+            // 修复：先复制历史节点内容，确保未修改的子节点保留历史索引
+            tree[rt] = tree[las];
+            if (l == r) { tree[rt].v = v; return; }
+            int mid = (l + r) >> 1;
+            if (p <= mid) {
+                tree[rt].l = ++cnt;
+                update(l, mid, tree[rt].l, tree[las].l, p, v);
+            }
+            else {
+                tree[rt].r = ++cnt;
+                update(mid + 1, r, tree[rt].r, tree[las].r, p, v);
+            }
+        }
         int query(int l, int r, int rt, int v) { if (l == r) { return tree[rt].v; }int mid = l + r >> 1;if (v <= mid) { return query(l, mid, tree[rt].l, v); } else { return query(mid + 1, r, tree[rt].r, v); } }
     };
     template<int N>
@@ -141,7 +193,13 @@ namespace OI_Start {
     protected:
         int tree[N][128], cnt[N], tot;int Get(char ch) { return ch - ' '; }
     public:
-        void init() { for (int i = 0; i <= tot; i++) { cnt[i] = 0;for (int j = 0; j < 128; j++) { tree[i][j] = 0; } }tot = 0; }
+        void init() {
+            // 修复：先置 tot，再清理根节点（避免使用未初始化的 tot）
+            tot = 0;
+            // 清理根节点
+            cnt[0] = 0;
+            for (int j = 0; j < 128; j++) tree[0][j] = 0;
+        }
         void insert(string s) { int u = 0;for (int i = 0; i < s.size(); i++) { int v = Get(s[i]);if (tree[u][v] == 0) { tree[u][v] = ++tot; }u = tree[u][v];cnt[u]++; } }
         int find(string s) { int u = 0;for (int i = 0; i < s.size(); i++) { int v = Get(s[i]);if (tree[u][v] == 0) { return 0; }u = tree[u][v]; }return cnt[u]; }
     };
