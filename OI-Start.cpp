@@ -1,3 +1,8 @@
+/*
+* 我错了喵 我再也不不写注释了喵
+* 我实在是懒得压行了，这个是我早期的一个东西马蜂，实在是一言难尽，现在的代码一堆屎山，我实在是懒得重构了，等一位有缘人来重构吧。。。
+* 你看 Git 历史记录就知道有多屎了。。。。。
+*/
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long
@@ -169,6 +174,131 @@ namespace OI_Start {
         bool SPFA(int s) { queue<int>q;q.push(s);vector<int>dist(n + 1, Inf);dist[s] = 0;vector<int>cnt(n + 1, 0);cnt[s] = 1;while (!q.empty()) { int u = q.front();q.pop();for (auto [v, w] : e[u]) { if (dist[v] > dist[u] + w) { dist[v] = dist[u] + w;q.push(v);cnt[v]++;if (cnt[v] > n) { return true; } } } }return false; }
         int Kurskal() { for (int i = 1; i <= n; i++) { f[i] = i; }vector<Side>side;for (int i = 1; i <= n; i++) { for (auto [v, w] : e[i]) { side.push_back({ i, v, w }); } }sort(side.begin(), side.end());int ans = 0, cnt = 0;for (Side i : side) { int x = i.u, y = i.v;int fx = find(x), fy = find(y);if (fx != fy) { f[fx] = fy;cnt++;ans += i.w; } }if (cnt == n - 1) { return ans; }return -1; }
         vector<int> topsort() { vector<int>res;vector<int>in_(n + 1, 0);for (int i = 1; i <= n; i++) { for (auto j : e[i]) { in_[j.v]++; } }queue<int>q;for (int i = 1; i <= n; i++) { if (in_[i] == 0)q.push(i); }while (!q.empty()) { int u = q.front();q.pop();res.push_back(u);for (auto i : e[u]) { in_[i.v]--;if (in_[i.v] == 0)q.push(i.v); } }return res; }
+    };
+    template<int N>
+    class PBST { // 基于 Splay 伸展树实现的普通平衡树
+    public:
+        int INF, cnt, rt; // INF: 无穷大边界, cnt: 当前节点总数, rt: 根节点编号
+        struct node {
+            int ch[2], fa, val, cnt, siz;
+            // ch[0/1]: 左右儿子, fa: 父亲, val: 节点权值, cnt: 同值个数, siz: 子树大小
+        } tree[N];
+
+        // 初始化：清空树并设置无穷大边界值
+        void init(int __inf__) { INF = __inf__; rt = cnt = 0; }
+
+        // 更新节点信息：子树大小 = 左子树大小 + 右子树大小 + 自身重复个数
+        void pushup(int x) {
+            if (!x) return;
+            tree[x].siz = tree[tree[x].ch[0]].siz + tree[tree[x].ch[1]].siz + tree[x].cnt;
+        }
+
+        // 判断身份：判断节点 x 是父亲的左儿子(0)还是右儿子(1)
+        int Get(int x) { return x == tree[tree[x].fa].ch[1]; }
+
+        // 基础旋转 (Rotate)：平衡树的核心，将 x 向上旋转一层，同时保持 BST 性质
+        void r(int x) {
+            int y = tree[x].fa, z = tree[y].fa, sk = Get(x);
+            tree[y].ch[sk] = tree[x].ch[sk ^ 1]; // x 的内侧儿子过继给 y
+            if (tree[x].ch[sk ^ 1]) tree[tree[x].ch[sk ^ 1]].fa = y;
+            tree[x].ch[sk ^ 1] = y, tree[y].fa = x; // x 变成 y 的父亲
+            tree[x].fa = z; // x 接上原先祖父 z
+            if (z) tree[z].ch[y == tree[z].ch[1]] = x;
+            pushup(y), pushup(x); // 旋转后由下至上更新 siz
+        }
+
+        // 伸展操作 (Splay)：通过旋转将 x 提升到目标 k 的下方。k=0 时 x 成为新根
+        void splay(int x, int k) {
+            for (; tree[x].fa != k; ) {
+                int y = tree[x].fa, z = tree[y].fa;
+                if (z != k) { // 双旋判定：如果祖父不是目标，根据形状选择先转谁
+                    (Get(x) == Get(y)) ? r(y) : r(x); // 一字形先转父，之字形转自身
+                }
+                r(x); // 最后都要转自身
+            }
+            if (k == 0) rt = x; // 如果 k 为 0，更新全局根节点
+        }
+
+        // 插入操作：存在则 cnt++, 不存在则新建，最后均需 splay 到根部维护复杂度
+        void insert(int x) {
+            int root = rt, fa = 0;
+            while (root && tree[root].val != x) fa = root, root = tree[root].ch[x > tree[root].val];
+            if (root) tree[root].cnt++; // 权值已存在，直接增加计数
+            else { // 新建节点
+                root = ++cnt; tree[root].val = x; tree[root].fa = fa; tree[root].cnt = 1;
+                if (fa) tree[fa].ch[x > tree[fa].val] = root;
+            }
+            pushup(root); pushup(fa); splay(root, 0);
+        }
+
+        // 查询排名：查询权值 x 在集合中的排名（比其小的个数 + 1）
+        int rak(int x) {
+            int root = rt, res = 0;
+            while (root) {
+                if (x < tree[root].val) root = tree[root].ch[0];
+                else {
+                    res += tree[tree[root].ch[0]].siz; // 累加左子树大小
+                    if (x == tree[root].val) { splay(root, 0); return res + 1; }
+                    res += tree[root].cnt; // 累加当前节点个数
+                    root = tree[root].ch[1];
+                }
+            }
+            return res + 1;
+        }
+
+        // 查询数值：找到排名为 x 的节点并返回其编号
+        int kth(int x) {
+            int root = rt;
+            while (root) {
+                if (x <= tree[tree[root].ch[0]].siz) root = tree[root].ch[0];
+                else {
+                    x -= tree[tree[root].ch[0]].siz + tree[root].cnt;
+                    if (x <= 0) { splay(root, 0); return root; }
+                    root = tree[root].ch[1];
+                }
+            }
+            return -1;
+        }
+
+        // 前驱：小于 x 且最大的数
+        int pre(int x) {
+            int root = rt, res = -INF;
+            while (root) {
+                if (x <= tree[root].val) root = tree[root].ch[0];
+                else res = max(res, tree[root].val), root = tree[root].ch[1];
+            }
+            return res;
+        }
+
+        // 后继：大于 x 且最小的数
+        int nex(int x) {
+            int root = rt, res = INF;
+            while (root) {
+                if (x >= tree[root].val) root = tree[root].ch[1];
+                else res = min(res, tree[root].val), root = tree[root].ch[0];
+            }
+            return res;
+        }
+
+        // 定位：找到权值为 x 的节点并将其旋转到根部
+        void find(int x) {
+            int root = rt;
+            while (root && tree[root].val != x) root = tree[root].ch[x > tree[root].val];
+            if (root) splay(root, 0);
+        }
+
+        // 删除操作：利用前驱后继将目标隔离，然后通过 Splay 特性安全删除
+        void del(int x) {
+            find(x); // 先把 x 旋到根
+            if (tree[rt].cnt > 1) { tree[rt].cnt--; pushup(rt); return; } // 重复值只减计数
+            // 下面利用 splay 隔离目标：找到左子树最右节点和右子树最左节点
+            int l = tree[rt].ch[0], r = tree[rt].ch[1];
+            while (tree[l].ch[1]) l = tree[l].ch[1];
+            while (tree[r].ch[0]) r = tree[r].ch[0];
+            splay(l, 0); splay(r, l); // 将 x 挤到 r 的左儿子位置，此时 x 必为叶子
+            tree[r].ch[0] = 0; // 直接抹除 x 节点
+            pushup(r), pushup(l);
+        }
     };
 }using namespace OI_Start;
 
